@@ -1,2 +1,2 @@
-poker-ai
+poker ai
 ========
