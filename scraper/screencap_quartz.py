@@ -65,7 +65,7 @@ class ScreenCapture ( object ):
 if __name__ == '__main__':
     import cv2
     
-    sc = ScreenCap()
+    sc = ScreenCapture()
     sc.capture()
     a = sc.tonumpy()
-    cv2.imwrite('screenshot.png', a)
+    cv2.imwrite('screenshot.tiff', a)

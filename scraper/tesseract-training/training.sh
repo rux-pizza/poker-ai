@@ -24,12 +24,13 @@ mv pffmtable pokerai.pffmtable
 mv shapetable pokerai.shapetable
 # combine into pokerai.traineddata
 combine_tessdata pokerai.
-# copy trained data into folder tessdata
-sudo cp pokerai.traineddata /usr/local/share/tessdata
 
+
+## copy trained data into folder tessdata
+sudo cp pokerai.traineddata /usr/local/share/tessdata
 
 ## uses previous learning to create a larger box file (exp1)
 
 # box file with -l pokerai option
 tesseract pokerai.pokerstar.exp1.tif pokerai.pokerstar.exp1 -l pokerai makebox
-# TODO correct mistakes
+# TODO correct mistakes on the newly created pokerai.pokerstar.exp1.box
