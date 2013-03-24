@@ -169,26 +169,16 @@ class Gui ( object ):
         # controls frame
         frame_ctr = Tk.Frame(frame)
         frame_ctr.grid(row=0, column=1, sticky=Gui.GRID_BOTH)
-        # - tabs
-        frame_tabs = Tk.Frame(frame_ctr,relief=Tk.GROOVE,bd=2)
-        self.sp_cnf_tabs = self.gui_pack_tools_btns([
-            {'icon':'target', 'command':self.do_nothing, 'relief':Tk.SUNKEN},
-            {'icon':'card', 'command':self.do_nothing, 'relief':Tk.RAISED},
-            {'icon':'text', 'command':self.do_nothing, 'relief':Tk.RAISED},
-            ], frame_tabs)
-        frame_tabs.grid(row=0, sticky=Gui.GRID_BOTH)
         # - preview and controls
         frame_preview = Tk.Frame(frame_ctr)
-        frame_preview.grid(row=1)
+        frame_preview.grid(row=0)
         #   tools
         frame_toolbar = Tk.Frame(frame_preview)
         self.sp_cnf_preview_toolbar = self.gui_pack_tools_btns([
             {'icon':'zoom_plus', 'command':self.sp_prev_zoom_plus},
             {'icon':'zoom_minus', 'command':self.sp_prev_zoom_minus},
-            {'icon':'ok', 'command':self.do_nothing},
-            {'icon':'plus', 'command':self.do_nothing},
             ], frame_toolbar)
-        frame_toolbar.grid(row=0,columnspan=3, column=0, sticky=Gui.GRID_BOTH)
+        frame_toolbar.grid(row=1, columnspan=2, sticky=Gui.GRID_BOTH)
         #   preview
         self.canvas_sp_cnf_prev_img_zoom = 2
         frame_prev_above = Tk.Frame(frame_preview)
@@ -220,6 +210,16 @@ class Gui ( object ):
         self.canvas_sp_cnf_prev = canvas_prev
         canvas_prev.configure(width=128, height=128, bg='gray')
         frame_prev.grid(row=2, column=1, sticky=Tk.N)
+
+        # - tabs
+        frame_tabs = Tk.Frame(frame_ctr,relief=Tk.GROOVE,bd=2)
+        self.sp_cnf_tabs = self.gui_pack_tools_btns([
+            {'icon':'target', 'command':self.do_nothing, 'relief':Tk.SUNKEN},
+            {'icon':'card', 'command':self.do_nothing, 'relief':Tk.RAISED},
+            {'icon':'text', 'command':self.do_nothing, 'relief':Tk.RAISED},
+            ], frame_tabs)
+        frame_tabs.grid(row=1, sticky=Gui.GRID_BOTH)
+
         # - place holder
         Tk.Label(frame_ctr, text='LOL').grid(row=2)
         frame_ctr.grid_rowconfigure(2, weight=1)
