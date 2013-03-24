@@ -31,7 +31,7 @@ class Gui ( object ):
         self.menu_bar = self.gui_set_menu()
         self.root.config(menu=self.menu_bar)
         #
-        self.frame_root = Tk.Frame(root, relief=Tk.SUNKEN, bd=Gui.RELIEF_S)
+        self.frame_root = Tk.Frame(root, relief=Tk.GROOVE, bd=Gui.RELIEF_S)
         #
         self.toolbar = Tk.Frame(self.frame_root, relief=Gui.RELIEF, bd=Gui.RELIEF_S)
         self.toolbar.pack(fill=Tk.BOTH, side=Tk.TOP)
@@ -110,7 +110,7 @@ class Gui ( object ):
         #
         return frame
 
-    def gui_pack_btn ( self, frame, icon, command, side=Tk.LEFT, state=Tk.NORMAL, space=2 ):
+    def gui_pack_btn ( self, frame, icon, command, side=Tk.LEFT, state=Tk.NORMAL, space=2, relief=Tk.FLAT ):
         img = ImageTk.PhotoImage(Image.open('gui_icons/'+icon+'.png'))
         self.icons.append(img)
         try:
@@ -128,13 +128,13 @@ class Gui ( object ):
         h = ImageTk.PhotoImage.height(img)
         d = space
         #
-        cnv = Tk.Canvas(frame, width=w+2*d, height=h+2*d, state=state, highlightthickness=d)
+        cnv = Tk.Canvas(frame, width=w, height=h, state=state, highlightthickness=0, relief=relief, bd=d)
         cnv.create_image(d, d, anchor='nw',image=img, activeimage=img_active, disabledimage=img_disabled)
         cnv.bind('<ButtonRelease-1>', command)
         cnv.pack(side=side)
         return cnv
 
-    
+
     # --- start screen --- #
     def gui_pack_frame_start ( self, frame ):
         st_frame = Tk.Frame(frame,relief=Gui.RELIEF,bd=Gui.RELIEF_S)
@@ -154,7 +154,7 @@ class Gui ( object ):
     def gui_pack_frame_sp_cnf ( self, parent ):
         # resize
         self.resize(900, 600)
-        frame = Tk.Frame(parent)
+        frame = Tk.Frame(parent,relief=Gui.RELIEF,bd=Gui.RELIEF_S)
         frame.pack(fill=Tk.BOTH,expand=1)
         frame.grid_rowconfigure(0, weight=1)
         #
@@ -165,52 +165,63 @@ class Gui ( object ):
         frame_sc.grid(row=0, column=0, sticky=Gui.GRID_BOTH)
         frame.grid_columnconfigure(0, weight=1)
         frame.configure(relief=Gui.RELIEF,bd=Gui.RELIEF_S)
-        #
+        
         # controls frame
-        frame_ctr = Tk.Frame(frame,relief=Gui.RELIEF,bd=Gui.RELIEF_S)
+        frame_ctr = Tk.Frame(frame)
         frame_ctr.grid(row=0, column=1, sticky=Gui.GRID_BOTH)
-        # - tools (0,0:2)
-        frame_toolbar = Tk.Frame(frame_ctr)
+        # - tabs
+        frame_tabs = Tk.Frame(frame_ctr,relief=Tk.GROOVE,bd=2)
+        self.sp_cnf_tabs = self.gui_pack_tools_btns([
+            {'icon':'target', 'command':self.do_nothing, 'relief':Tk.SUNKEN},
+            {'icon':'text', 'command':self.do_nothing, 'relief':Tk.RAISED},
+            ], frame_tabs)
+        frame_tabs.grid(row=0, sticky=Gui.GRID_BOTH)
+        # - preview and controls
+        frame_preview = Tk.Frame(frame_ctr)
+        frame_preview.grid(row=1)
+        #   tools
+        frame_toolbar = Tk.Frame(frame_preview)
         self.sp_cnf_preview_toolbar = self.gui_pack_tools_btns([
             {'icon':'zoom_plus', 'command':self.sp_prev_zoom_plus},
             {'icon':'zoom_minus', 'command':self.sp_prev_zoom_minus},
+            {'icon':'ok', 'command':self.do_nothing},
+            {'icon':'plus', 'command':self.do_nothing},
             ], frame_toolbar)
-        #
         frame_toolbar.grid(row=0,columnspan=3, column=0, sticky=Gui.GRID_BOTH)
-        # - preview (1:3,0:2)
+        #   preview
         self.canvas_sp_cnf_prev_img_zoom = 2
-        frame_prev_above = Tk.Frame(frame_ctr)
+        frame_prev_above = Tk.Frame(frame_preview)
         self.gui_pack_btn(frame_prev_above, 'down',
                           lambda e, s=self:self.sp_prev_move(e,'N',-1), side=Tk.BOTTOM, space=0)
         self.gui_pack_btn(frame_prev_above, 'up',
                           lambda e, s=self:self.sp_prev_move(e,'N',1), side=Tk.BOTTOM, space=0)
         frame_prev_above.grid(row=1, column=1)
-        frame_prev_left = Tk.Frame(frame_ctr)
+        frame_prev_left = Tk.Frame(frame_preview)
         self.gui_pack_btn(frame_prev_left, 'right', 
                           lambda e, s=self:self.sp_prev_move(e,'W',-1), side=Tk.RIGHT, space=0)
         self.gui_pack_btn(frame_prev_left, 'left',
                           lambda e, s=self:self.sp_prev_move(e,'W',1), side=Tk.RIGHT, space=0)
         frame_prev_left.grid(row=2, column=0)
-        frame_prev_right = Tk.Frame(frame_ctr)
+        frame_prev_right = Tk.Frame(frame_preview)
         self.gui_pack_btn(frame_prev_right, 'left',
                           lambda e, s=self:self.sp_prev_move(e,'E',-1), side=Tk.LEFT, space=0)
         self.gui_pack_btn(frame_prev_right, 'right',
                           lambda e, s=self:self.sp_prev_move(e,'E',1), side=Tk.LEFT, space=0)
         frame_prev_right.grid(row=2, column=2)
-        frame_prev_below = Tk.Frame(frame_ctr)
+        frame_prev_below = Tk.Frame(frame_preview)
         self.gui_pack_btn(frame_prev_below, 'up',
                           lambda e, s=self:self.sp_prev_move(e,'S',-1), side=Tk.TOP, space=0)
         self.gui_pack_btn(frame_prev_below, 'down',
                           lambda e, s=self:self.sp_prev_move(e,'S',1), side=Tk.TOP, space=0)
         frame_prev_below.grid(row=3, column=1)
         #
-        (frame_prev, canvas_prev) = self.gui_canvas_and_scroll(frame_ctr)
+        (frame_prev, canvas_prev) = self.gui_canvas_and_scroll(frame_preview)
         self.canvas_sp_cnf_prev = canvas_prev
         canvas_prev.configure(width=128, height=128, bg='gray')
         frame_prev.grid(row=2, column=1, sticky=Tk.N)
-        # - text
-        Tk.Label(frame_ctr, text='text').grid(row=4,column=1)
-        frame_ctr.grid_rowconfigure(4, weight=1)
+        # - place holder
+        Tk.Label(frame_ctr, text='LOL').grid(row=2)
+        frame_ctr.grid_rowconfigure(2, weight=1)
         #
         return frame
 
@@ -259,7 +270,7 @@ class Gui ( object ):
         self.resize(300, 200)
         self.toolbar_start.pack(fill=Tk.BOTH)
         self.frame_start.pack(fill=Tk.BOTH,expand=1)
-            
+        
             
     # ====== GUI ACTION ====== #
     # --- button commands --- #
@@ -408,7 +419,10 @@ class Gui ( object ):
         cnv.coords(self.select_rect, x0, y0, x1, y1)
         self.sp_preview(x0,y0,x1,y1)
         
-        
+    def do_nothing ( self, ev ):
+        pass
+
+
 if __name__ == "__main__":
     root = Tk.Tk()
     gui = Gui(root)
