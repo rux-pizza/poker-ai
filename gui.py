@@ -173,6 +173,7 @@ class Gui ( object ):
         frame_tabs = Tk.Frame(frame_ctr,relief=Tk.GROOVE,bd=2)
         self.sp_cnf_tabs = self.gui_pack_tools_btns([
             {'icon':'target', 'command':self.do_nothing, 'relief':Tk.SUNKEN},
+            {'icon':'card', 'command':self.do_nothing, 'relief':Tk.RAISED},
             {'icon':'text', 'command':self.do_nothing, 'relief':Tk.RAISED},
             ], frame_tabs)
         frame_tabs.grid(row=0, sticky=Gui.GRID_BOTH)
@@ -278,7 +279,7 @@ class Gui ( object ):
         self.spCnf = ScraperConfig()
         self.gui_switch_to_sp_cnf()
         screenshots = [ f for f in os.listdir(Gui.path_screenshots)
-                        if os.path.isfile(os.path.join(Gui.path_screenshots,f)) ]
+                        if os.path.splitext(f)[1] == '.tif' ]
         img = ImageTk.PhotoImage(Image.open(os.path.join(Gui.path_screenshots,screenshots[0])))
         self.sp_show_image(img)
         
