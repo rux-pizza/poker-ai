@@ -5,4 +5,6 @@ from gui import Gui
 
 root = Tkinter.Tk()
 gui = Gui(root)
+root.focus_force()
 root.mainloop()
+
