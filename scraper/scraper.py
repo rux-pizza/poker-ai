@@ -99,6 +99,9 @@ class Scraper ( object ):
 
         return [ (num1,suit1), (num2,suit2) ]
     
+
+    def do_ocr ( self, img ):
+        return 'LOL'
     
 if __name__ == '__main__':
     try:

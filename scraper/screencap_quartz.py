@@ -52,9 +52,14 @@ class ScreenCapture ( object ):
         array = array.reshape([self.height, self.width, -1])
         array = array[:,:,0:3]
         array = array.copy() # DEBUG ?
-
+        self.array = array
+        
         return array
 
+    def get_region ( self, coords ):
+        (x0, y0, x1, y1) = coords
+        return self.array[x0:x1, y0:y1]
+        
     def pixel ( self, x, y ):
         data_format = "BBBB"
         offset = 4 * ((self.width*int(round(y))) + int(round(x)))

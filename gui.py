@@ -213,16 +213,24 @@ class Gui ( object ):
 
         # - tabs
         frame_tabs = Tk.Frame(frame_ctr,relief=Tk.GROOVE,bd=2)
+        frame_tabs.grid(row=1, sticky=Gui.GRID_BOTH)
         self.sp_cnf_tabs = self.gui_pack_tools_btns([
             {'icon':'target', 'command':self.do_nothing, 'relief':Tk.SUNKEN},
             {'icon':'card', 'command':self.do_nothing, 'relief':Tk.RAISED},
             {'icon':'text', 'command':self.do_nothing, 'relief':Tk.RAISED},
             ], frame_tabs)
-        frame_tabs.grid(row=1, sticky=Gui.GRID_BOTH)
 
+        # - content
+        frame_ocr = Tk.Frame(frame_ctr)
+        frame_ocr.grid(row=2)
+        ok_btn = self.gui_pack_btn(frame_ocr, 'ok', self.sp_cnf_accept, side=Tk.LEFT)
+        test_btn = self.gui_pack_btn(frame_ocr, 'work', self.sp_cnf_do_ocr, side=Tk.LEFT)
+        self.label_sp_cnf_ocr = Tk.Label(frame_ocr)
+        self.label_sp_cnf_ocr.pack(side=Tk.BOTTOM)
+        
         # - place holder
-        Tk.Label(frame_ctr, text='LOL').grid(row=2)
-        frame_ctr.grid_rowconfigure(2, weight=1)
+        Tk.Label(frame_ctr, text='LOL').grid(row=3)
+        frame_ctr.grid_rowconfigure(3, weight=1)
         #
         return frame
 
@@ -419,6 +427,18 @@ class Gui ( object ):
         #
         cnv.coords(self.select_rect, x0, y0, x1, y1)
         self.sp_preview(x0,y0,x1,y1)
+
+    def sp_cnf_accept ( self, ev ):
+        coords = (self.click_x0, self.click_x1, self.click_y0, self.click_y1)
+        img = self.sc.get_region(coords)
+        #
+        self.spCnf.set_region(img, coords)
+    
+    def sp_cnf_do_ocr ( self, ev ):
+        img = self.spCnf.get_region()
+        txt = self.sp.do_ocr(img)
+        #
+        self.label_sp_cnf_ocr.config(text=txt)
         
     def do_nothing ( self, ev ):
         pass
