@@ -48,24 +48,23 @@ class ScreenCapture ( object ):
         self.width = CG.CGImageGetWidth(image)
         self.height = CG.CGImageGetHeight(image)
 
+        array = np.frombuffer(self._data,'B')
+        array = array.reshape([self.height, self.width, -1])
+        array = array[:,:,0:3]
+        array = array.copy() # DEBUG ?
+
+        return array
+
     def pixel ( self, x, y ):
         data_format = "BBBB"
         offset = 4 * ((self.width*int(round(y))) + int(round(x)))
         b, g, r, a = struct.unpack_from(data_format, self._data, offset=offset)
         return (r, g, b, a)
 
-    def tonumpy ( self ):
-        a = np.frombuffer(self._data,'B')
-        a = a.reshape([self.height, self.width, -1])
-        a = a[:,:,0:3]
-        a = a.copy() # DEBUG
-        return a
-
     
 if __name__ == '__main__':
     import cv2
     
     sc = ScreenCapture()
-    sc.capture()
-    a = sc.tonumpy()
+    a = sc.capture()
     cv2.imwrite('screenshot.tiff', a)

@@ -1,4 +1,4 @@
-import sys, argparse
+import sys, os
 import numpy as np
 import cv2
 from cv2 import cv
@@ -8,10 +8,11 @@ class Scraper ( object ):
     def __init__ ( self ):
         self.Corr = cv.CV_TM_CCORR_NORMED
         self.MinCorr = 0.97
-        
+
+        path = os.path.join(os.path.dirname(__file__), 'templates')
         self.SuitTemplates = dict()
         for suit in ['h','d','c','s']:
-            template = cv2.imread('suits/'+suit+'.png')
+            template = cv2.imread(path+'/suits/'+suit+'.png')
             if template==None:
                 raise Exception('Template for suit %s not found\n' % suit)
 
@@ -19,7 +20,7 @@ class Scraper ( object ):
 
         self.NumTemplates = dict()
         for num in xrange(1,13+1):
-            template = cv2.imread('numbers/%d.png' % num)
+            template = cv2.imread(path+'/numbers/%d.png' % num)
             if template==None:
                 raise Exception('Template for number %d not found\n' % num)
 
