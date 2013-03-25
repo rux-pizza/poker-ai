@@ -28,9 +28,10 @@ class Scraper ( object ):
 			self.NumTemplates[num] = template
 
 		# tesseract
-		self.ocr_api = tesseract.TessBaseAPI()
-		self.ocr_api.Init(".","eng",tesseract.OEM_DEFAULT)
-		self.ocr_api.SetPageSegMode(tesseract.PSM_AUTO)
+		if True:
+			self.ocr_api = tesseract.TessBaseAPI()
+			self.ocr_api.Init(".","eng",tesseract.OEM_DEFAULT)
+			self.ocr_api.SetPageSegMode(tesseract.PSM_AUTO)
 
 	def findPlayerLoc ( self, table, pseudo ):
 		template = cv2.imread('pseudos/'+pseudo+'.png')
@@ -106,11 +107,11 @@ class Scraper ( object ):
 	
 
 	def do_ocr ( self, img ):
-		try:
-			tesseract.SetCvImage(img, self.ocr_api)
-			text = self.ocr_api.GetUTF8Text()
-		except Exception as e:
-			text = str(e)
+		print 'set image...'
+		tesseract.SetCvImage(img, self.ocr_api)
+		print 'ocr...'
+		text = self.ocr_api.GetUTF8Text()
+
 		return text
 	
 if __name__ == '__main__':

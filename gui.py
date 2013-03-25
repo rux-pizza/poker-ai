@@ -435,7 +435,7 @@ class Gui ( object ):
 		self.sp_preview(x0,y0,x1,y1)
 
 	def sp_cnf_accept ( self, ev ):
-		coords = (self.click_x0, self.click_x1, self.click_y0, self.click_y1)
+		coords = (self.click_x0, self.click_y0, self.click_x1, self.click_y1)
 		self.spCnf.set_region(coords)
 	
 	def sp_cnf_do_ocr ( self, ev ):
