@@ -288,7 +288,9 @@ class Gui ( object ):
         self.gui_switch_to_sp_cnf()
         screenshots = [ f for f in os.listdir(Gui.path_screenshots)
                         if os.path.splitext(f)[1] == '.tif' ]
-        img = ImageTk.PhotoImage(Image.open(os.path.join(Gui.path_screenshots,screenshots[0])))
+        f = os.path.join(Gui.path_screenshots,screenshots[0])
+        img = ImageTk.PhotoImage(Image.open(f))
+        self.spCnf.set_image(f)
         self.sp_show_image(img)
         
     def sp_cnf_open ( self, ev ):
@@ -317,6 +319,7 @@ class Gui ( object ):
                             )
         try:
             img = ImageTk.PhotoImage(Image.open(f))
+            self.spCnf.set_image(f)
             self.sp_show_image(img)
         except:
             pass
@@ -430,9 +433,8 @@ class Gui ( object ):
 
     def sp_cnf_accept ( self, ev ):
         coords = (self.click_x0, self.click_x1, self.click_y0, self.click_y1)
-        img = self.sc.get_region(coords)
         #
-        self.spCnf.set_region(img, coords)
+        self.spCnf.set_region(coords)
     
     def sp_cnf_do_ocr ( self, ev ):
         img = self.spCnf.get_region()
