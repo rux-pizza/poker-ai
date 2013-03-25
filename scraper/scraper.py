@@ -106,10 +106,11 @@ class Scraper ( object ):
 	
 
 	def do_ocr ( self, img ):
-		#image=cv.LoadImage("/Users/emile/Documents/RUX/poker-ai/scraper/screenshots/screenshot_1.tif", cv.CV_LOAD_IMAGE_GRAYSCALE)
-		
-		tesseract.SetCvImage(img, self.ocr_api)
-		text = self.ocr_api.GetUTF8Text()
+		try:
+			tesseract.SetCvImage(img, self.ocr_api)
+			text = self.ocr_api.GetUTF8Text()
+		except Exception as e:
+			text = str(e)
 		return text
 	
 if __name__ == '__main__':
