@@ -1,4 +1,5 @@
 import sys, os
+import cv2
 import cv2.cv as cv
 import numpy as np
 
@@ -8,7 +9,7 @@ class ScraperConfig ( object ):
 		pass
 
 	def set_image ( self, f ):
-		self.img = cv.LoadImage(f, cv.CV_LOAD_IMAGE_GRAYSCALE)
+		self.img = cv2.imread(f, cv.CV_LOAD_IMAGE_GRAYSCALE)
 		
 	def set_region ( self, coords ):
 		self.coords = coords
