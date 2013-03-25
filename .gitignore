@@ -2,6 +2,18 @@
 ###################
 *.pyc
 
+# Backup files #
+################
+*~
+
+# Milou what is that ? #
+########################
+\#*\#
+
+# Users screenshots #
+#####################
+./scraper/screenshots/*
+
 # OS generated files #
 ######################
 .DS_Store
