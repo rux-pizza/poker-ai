@@ -1,0 +1,44 @@
+Install :
+
+64 bits
+
+_ Python 2.7 64 bits last release : http://www.python.org/download/releases/
+   (http://www.python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi)
+_ PIL et OpenCV (unofficial 64 bits : http://www.lfd.uci.edu/~gohlke/pythonlibs/ requieres Visual C++ 2008 redistributable (http://www.microsoft.com/en-us/download/confirmation.aspx?id=15336) and Numpy, same page)
+
+_cygwin (http://cygwin.com/install.html) including subversion, wget, unzip
+
+
+
+
+32 bits
+
+_Python 2.7 32 bits last release : http://www.python.org/download/releases/
+    (http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi)
+_ PIL http://www.pythonware.com/products/pil/
+
+_ numpy http://www.scipy.org/Download (http://sourceforge.net/projects/numpy/files/NumPy)
+
+_ opencv 
+	Easy way (17MB){
+	_ unofficial opencv http://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
+	}
+	Or Hard way (200MB++)
+	{
+	_ CMake : http://www.cmake.org/cmake/resources/software.html
+	_ opencv http://opencv.org/
+	_ add the opencv bin to the path and move the python2.7 to the dist-packages
+	}
+
+_ tesseract
+	_ tesseract https://code.google.com/p/tesseract-ocr/downloads/list (https://tesseract-ocr.googlecode.com/files/tesseract-ocr-setup-3.02.02.exe)
+	_ python-wrapper https://code.google.com/p/python-tesseract/(https://code.google.com/p/python-tesseract/downloads/list)
+
+_ wxPython http://sourceforge.net/projects/wxpython/?source=dlp
+
+(
+ipython :
+_ distribute : https://pypi.python.org/pypi/distribute#installation-instructions
+_ pyreadline https://pypi.python.org/pypi/pyreadline#downloads
+_ ipython : https://pypi.python.org/pypi/ipython
+)

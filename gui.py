@@ -7,7 +7,7 @@ import cv2, Image, ImageTk
 
 package_directory = os.path.dirname(os.path.abspath(__file__))
 
-from scraper.screencap_quartz import ScreenCapture
+from scraper.screencap import ScreenCapture
 from scraper.scraper import Scraper
 from scraper.scraperconfig import ScraperConfig
 
