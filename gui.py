@@ -223,10 +223,9 @@ class Gui ( object ):
 		# - content
 		frame_ocr = Tk.Frame(frame_ctr)
 		frame_ocr.grid(row=2)
-		ok_btn = self.gui_pack_btn(frame_ocr, 'ok', self.sp_cnf_accept, side=Tk.LEFT)
-		test_btn = self.gui_pack_btn(frame_ocr, 'work', self.sp_cnf_do_ocr, side=Tk.LEFT)
+		test_btn = self.gui_pack_btn(frame_ocr, 'work', self.sp_cnf_do_ocr, side=Tk.TOP)
 		self.label_sp_cnf_ocr = Tk.Label(frame_ocr)
-		self.label_sp_cnf_ocr.pack(side=Tk.BOTTOM)
+		self.label_sp_cnf_ocr.pack(side=Tk.TOP)
 		
 		# - place holder
 		Tk.Label(frame_ctr, text='LOL').grid(row=3)
