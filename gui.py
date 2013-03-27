@@ -432,7 +432,12 @@ class Gui ( object ):
 		self.sp_preview(x0,y0,x1,y1)
 
 	def sp_cnf_select_region ( self, ev ):
-		coords = (self.click_x0, self.click_y0, self.click_x1, self.click_y1)
+		x0 = min(self.click_x0, self.click_x1)
+		x1 = max(self.click_x0, self.click_x1)
+		y0 = min(self.click_y0, self.click_y1)
+		y1 = max(self.click_y0, self.click_y1)
+
+		coords = (x0, y0, x1, y1)
 		self.spCnf.set_selected_rect(coords)
 	
 	def sp_cnf_do_ocr ( self, ev ):
@@ -440,7 +445,6 @@ class Gui ( object ):
 		txt = self.sp.do_ocr(img)
 		#
 		print txt
-		self.label_sp_cnf_ocr.config(text=txt)
 		
 	def do_nothing ( self, ev ):
 		pass
