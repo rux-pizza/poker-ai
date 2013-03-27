@@ -172,63 +172,24 @@ class Gui ( object ):
 		# - preview and controls
 		frame_preview = Tk.Frame(frame_ctr)
 		frame_preview.grid(row=0)
-		#	tools
-		frame_toolbar = Tk.Frame(frame_preview)
-		self.sp_cnf_preview_toolbar = self.gui_pack_tools_btns([
-			{'icon':'zoom_plus', 'command':self.sp_prev_zoom_plus},
-			{'icon':'zoom_minus', 'command':self.sp_prev_zoom_minus},
-			], frame_toolbar)
-		frame_toolbar.grid(row=1, columnspan=2, sticky=Gui.GRID_BOTH)
-		#	preview
-		self.canvas_sp_cnf_prev_img_zoom = 2
-		frame_prev_above = Tk.Frame(frame_preview)
-		self.gui_pack_btn(frame_prev_above, 'down',
-						  lambda e, s=self:self.sp_prev_move(e,'N',-1), side=Tk.BOTTOM, space=0)
-		self.gui_pack_btn(frame_prev_above, 'up',
-						  lambda e, s=self:self.sp_prev_move(e,'N',1), side=Tk.BOTTOM, space=0)
-		frame_prev_above.grid(row=1, column=1)
-		frame_prev_left = Tk.Frame(frame_preview)
-		self.gui_pack_btn(frame_prev_left, 'right', 
-						  lambda e, s=self:self.sp_prev_move(e,'W',-1), side=Tk.RIGHT, space=0)
-		self.gui_pack_btn(frame_prev_left, 'left',
-						  lambda e, s=self:self.sp_prev_move(e,'W',1), side=Tk.RIGHT, space=0)
-		frame_prev_left.grid(row=2, column=0)
-		frame_prev_right = Tk.Frame(frame_preview)
-		self.gui_pack_btn(frame_prev_right, 'left',
-						  lambda e, s=self:self.sp_prev_move(e,'E',-1), side=Tk.LEFT, space=0)
-		self.gui_pack_btn(frame_prev_right, 'right',
-						  lambda e, s=self:self.sp_prev_move(e,'E',1), side=Tk.LEFT, space=0)
-		frame_prev_right.grid(row=2, column=2)
-		frame_prev_below = Tk.Frame(frame_preview)
-		self.gui_pack_btn(frame_prev_below, 'up',
-						  lambda e, s=self:self.sp_prev_move(e,'S',-1), side=Tk.TOP, space=0)
-		self.gui_pack_btn(frame_prev_below, 'down',
-						  lambda e, s=self:self.sp_prev_move(e,'S',1), side=Tk.TOP, space=0)
-		frame_prev_below.grid(row=3, column=1)
-		#
-		(frame_prev, canvas_prev) = self.gui_canvas_and_scroll(frame_preview)
-		self.canvas_sp_cnf_prev = canvas_prev
-		canvas_prev.configure(width=128, height=128, bg='gray')
-		frame_prev.grid(row=2, column=1, sticky=Tk.N)
-
-		# - tabs
+		self.gui_pack_preview(frame_preview)
+		# - tabs bar
 		frame_tabs = Tk.Frame(frame_ctr,relief=Tk.GROOVE,bd=2)
 		frame_tabs.grid(row=1, sticky=Gui.GRID_BOTH)
 		self.sp_cnf_tabs = self.gui_pack_tools_btns([
-			{'icon':'target', 'command':self.do_nothing, 'relief':Tk.SUNKEN},
+			{'icon':'target', 'command':self.sp_cnf_switch_tab_marker, 'relief':Tk.SUNKEN},
 			{'icon':'card', 'command':self.do_nothing, 'relief':Tk.RAISED},
-			{'icon':'text', 'command':self.do_nothing, 'relief':Tk.RAISED},
+			{'icon':'text', 'command':self.sp_cnf_switch_tab_ocr, 'relief':Tk.RAISED},
 			], frame_tabs)
-
-		# - content
-		frame_ocr = Tk.Frame(frame_ctr)
-		frame_ocr.grid(row=2)
-		test_btn = self.gui_pack_btn(frame_ocr, 'work', self.sp_cnf_do_ocr, side=Tk.TOP)
-		self.label_sp_cnf_ocr = Tk.Label(frame_ocr)
-		self.label_sp_cnf_ocr.pack(side=Tk.TOP)
-		
+		# - tab content
+		frame_tab = Tk.Frame(frame_ctr)
+		self.sp_cnf_frame_tab_content = frame_tab
+		self.gui_pack_tab_marker(frame_tab)
+		self.sp_cnf_tab_ocr = None
+		self.sp_cnf_tab_current = self.sp_cnf_tab_marker
+		frame_tab.grid(row=2)
 		# - place holder
-		Tk.Label(frame_ctr, text='LOL').grid(row=3)
+		Tk.Label(frame_ctr, text=':)').grid(row=3)
 		frame_ctr.grid_rowconfigure(3, weight=1)
 		#
 		return frame
@@ -259,7 +220,62 @@ class Gui ( object ):
 		#
 		return (frame, canvas)
 
-	# --- switch between screens --- #
+	def gui_pack_preview ( self, frame_preview ):
+		# tools
+		frame_toolbar = Tk.Frame(frame_preview)
+		self.sp_cnf_preview_toolbar = self.gui_pack_tools_btns([
+			{'icon':'zoom_plus', 'command':self.sp_prev_zoom_plus},
+			{'icon':'zoom_minus', 'command':self.sp_prev_zoom_minus},
+			], frame_toolbar)
+		frame_toolbar.grid(row=1, columnspan=2, sticky=Gui.GRID_BOTH)
+		# move buttons
+		self.canvas_sp_cnf_prev_img_zoom = 2
+		frame_prev_above = Tk.Frame(frame_preview)
+		self.gui_pack_btn(frame_prev_above, 'down',
+						  lambda e, s=self:self.sp_prev_move(e,'N',-1), side=Tk.BOTTOM, space=0)
+		self.gui_pack_btn(frame_prev_above, 'up',
+						  lambda e, s=self:self.sp_prev_move(e,'N',1), side=Tk.BOTTOM, space=0)
+		frame_prev_above.grid(row=1, column=1)
+		frame_prev_left = Tk.Frame(frame_preview)
+		self.gui_pack_btn(frame_prev_left, 'right', 
+						  lambda e, s=self:self.sp_prev_move(e,'W',-1), side=Tk.RIGHT, space=0)
+		self.gui_pack_btn(frame_prev_left, 'left',
+						  lambda e, s=self:self.sp_prev_move(e,'W',1), side=Tk.RIGHT, space=0)
+		frame_prev_left.grid(row=2, column=0)
+		frame_prev_right = Tk.Frame(frame_preview)
+		self.gui_pack_btn(frame_prev_right, 'left',
+						  lambda e, s=self:self.sp_prev_move(e,'E',-1), side=Tk.LEFT, space=0)
+		self.gui_pack_btn(frame_prev_right, 'right',
+						  lambda e, s=self:self.sp_prev_move(e,'E',1), side=Tk.LEFT, space=0)
+		frame_prev_right.grid(row=2, column=2)
+		frame_prev_below = Tk.Frame(frame_preview)
+		self.gui_pack_btn(frame_prev_below, 'up',
+						  lambda e, s=self:self.sp_prev_move(e,'S',-1), side=Tk.TOP, space=0)
+		self.gui_pack_btn(frame_prev_below, 'down',
+						  lambda e, s=self:self.sp_prev_move(e,'S',1), side=Tk.TOP, space=0)
+		frame_prev_below.grid(row=3, column=1)
+		# preview canvas
+		(frame_prev, canvas_prev) = self.gui_canvas_and_scroll(frame_preview)
+		self.canvas_sp_cnf_prev = canvas_prev
+		canvas_prev.configure(width=128, height=128, bg='gray')
+		frame_prev.grid(row=2, column=1, sticky=Tk.N)
+
+	def gui_pack_tab_marker ( self, frame_tab ):
+		frame = Tk.Frame(frame_tab)
+		frame.pack()
+		self.sp_cnf_tab_marker = frame
+		self.marker_name = Tk.StringVar()
+		self.marker_name.set('marker1')
+		input_text = Tk.Entry(frame, textvariable=self.marker_name)
+		input_text.pack(side=Tk.TOP)
+
+	def gui_pack_tab_ocr ( self, frame_tab ):
+		frame = Tk.Frame(frame_tab)
+		frame.pack()
+		self.sp_cnf_tab_ocr = frame
+		test_btn = self.gui_pack_btn(frame, 'work', self.sp_cnf_do_ocr, side=Tk.TOP)
+		
+	# --- switch between screens or tabs --- #
 	def gui_switch_to_sp_cnf ( self ):
 		self.toolbar_start.pack_forget()
 		self.frame_start.pack_forget()
@@ -278,7 +294,20 @@ class Gui ( object ):
 		self.resize(300, 200)
 		self.toolbar_start.pack(fill=Tk.BOTH)
 		self.frame_start.pack(fill=Tk.BOTH,expand=1)
-		
+
+	def sp_cnf_switch_tab_marker ( self, ev ):
+		self.sp_cnf_tab_current.pack_forget()
+		self.sp_cnf_tab_marker.pack()
+		self.sp_cnf_tab_current = self.sp_cnf_tab_marker
+
+	def sp_cnf_switch_tab_ocr ( self, ev ):
+		self.sp_cnf_tab_current.pack_forget()
+		if self.sp_cnf_tab_ocr:
+			self.sp_cnf_tab_ocr.pack()
+		else:
+			self.gui_pack_tab_ocr(self.sp_cnf_frame_tab_content)
+		self.sp_cnf_tab_current = self.sp_cnf_tab_ocr
+			
 			
 	# ====== GUI ACTION ====== #
 	# --- button commands --- #
@@ -430,6 +459,9 @@ class Gui ( object ):
 		#
 		cnv.coords(self.select_rect, x0, y0, x1, y1)
 		self.sp_preview(x0,y0,x1,y1)
+		#
+		self.sp_cnf_select_region(event)
+
 
 	def sp_cnf_select_region ( self, ev ):
 		x0 = min(self.click_x0, self.click_x1)
