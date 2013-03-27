@@ -288,9 +288,7 @@ class Gui ( object ):
 		screenshots = [ f for f in os.listdir(Gui.path_screenshots)
 						if os.path.splitext(f)[1] == '.tif' ]
 		f = os.path.join(Gui.path_screenshots,screenshots[0])
-		img = ImageTk.PhotoImage(Image.open(f))
-		self.spCnf.set_image(f)
-		self.sp_show_image(img)
+		self.sp_show_image(f)		
 		
 	def sp_cnf_open ( self, ev ):
 		pass
@@ -317,13 +315,13 @@ class Gui ( object ):
 							filetypes=[("Screenshots", "*.tif")]
 							)
 		try:
-			img = ImageTk.PhotoImage(Image.open(f))
-			self.spCnf.set_image(f)
-			self.sp_show_image(img)
+			self.sp_show_image(f)
 		except:
 			pass
 		
-	def sp_show_image ( self, img ):
+	def sp_show_image ( self, f ):
+		self.spCnf.set_image_file(f)
+		img = ImageTk.PhotoImage(Image.open(f))
 		self.canvas_sc_img = img
 		cnv = self.canvas_sc
 		cnv.create_image(0, 0, image=img, anchor="nw")
@@ -364,7 +362,7 @@ class Gui ( object ):
 		#
 		self.sp_preview(x0,y0,x1,y1)
 		#
-		self.sp_cnf_accept(event) # TEMPORARY !
+		self.sp_cnf_select_region(event)
 
 
 	# --- preview --- #
@@ -433,14 +431,15 @@ class Gui ( object ):
 		cnv.coords(self.select_rect, x0, y0, x1, y1)
 		self.sp_preview(x0,y0,x1,y1)
 
-	def sp_cnf_accept ( self, ev ):
+	def sp_cnf_select_region ( self, ev ):
 		coords = (self.click_x0, self.click_y0, self.click_x1, self.click_y1)
-		self.spCnf.set_region(coords)
+		self.spCnf.set_selected_rect(coords)
 	
 	def sp_cnf_do_ocr ( self, ev ):
-		img = self.spCnf.get_region()
+		img = self.spCnf.get_selected_region()
 		txt = self.sp.do_ocr(img)
 		#
+		print txt
 		self.label_sp_cnf_ocr.config(text=txt)
 		
 	def do_nothing ( self, ev ):

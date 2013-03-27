@@ -1,8 +1,7 @@
 import sys, os
 import numpy as np
 import cv2, tesseract
-from cv2 import cv
-from cv2 import cv as cv
+import cv2.cv as cv
 
 
 class Scraper ( object ):
@@ -106,12 +105,14 @@ class Scraper ( object ):
 		return [ (num1,suit1), (num2,suit2) ]
 	
 
-	def do_ocr ( self, img ):
-		print 'set image...'
-		tesseract.SetCvImage(img, self.ocr_api)
-		print 'ocr...'
+	def do_ocr ( self, cv2_img ):
+		h, w, c = cv2_img.shape
+		cv_img = cv.CreateImageHeader((w,h), cv.IPL_DEPTH_8U, c)
+		cv.SetData(cv_img, cv2_img.tostring(), cv2_img.dtype.itemsize * c * w)
+		#
+		tesseract.SetCvImage(cv_img, self.ocr_api)
 		text = self.ocr_api.GetUTF8Text()
-
+		#
 		return text
 	
 if __name__ == '__main__':
