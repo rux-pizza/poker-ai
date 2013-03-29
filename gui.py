@@ -2,7 +2,7 @@
 
 import os, os.path
 import Tkinter as Tk
-from tkFileDialog import askopenfilename
+import ttk, tkFileDialog
 import cv2, Image, ImageTk
 
 package_directory = os.path.dirname(os.path.abspath(__file__))
@@ -14,6 +14,7 @@ from scraper.scraperconfig import ScraperConfig
 
 class Gui ( object ):
 	path_screenshots = 'scraper/screenshots'
+	path_config_files = 'scraper/config_files'
 	RELIEF = Tk.RAISED
 	RELIEF_S = 2
 	GRID_V = Tk.N+Tk.S
@@ -27,10 +28,10 @@ class Gui ( object ):
 		root.wm_title("Poker AI")
 		self.root = root
 		self.icons = []
+		self.sp_cnf_region_is_selected = False
 		#
 		self.menu_bar = self.gui_set_menu()
 		self.root.config(menu=self.menu_bar)
-		#
 		self.frame_root = Tk.Frame(root, relief=Tk.GROOVE, bd=Gui.RELIEF_S)
 		#
 		self.toolbar = Tk.Frame(self.frame_root, relief=Gui.RELIEF, bd=Gui.RELIEF_S)
@@ -44,9 +45,9 @@ class Gui ( object ):
 		self.frame_sp_cnf = None
 		#
 		self.frame_root.pack(fill=Tk.BOTH,expand=1)
-		#
 		self.resize(300,200)
-		
+		#
+
 	# ====== GUI COMPONENTS ====== #
 	def resize ( self, w, h ):
 		win_w = self.root.winfo_screenwidth()
@@ -91,7 +92,9 @@ class Gui ( object ):
 		
 	def gui_pack_toolbar_sp_cnf ( self ):
 		toolbar = self.gui_pack_tools_btns([
-			{'icon':'open', 'command':self.sp_open_img},
+			{'icon':'save', 'command':self.sp_cnf_save},
+			{'icon':'open', 'command':self.sp_cnf_open},
+			{'icon':'load_screenshot', 'command':self.sp_open_img},
 			{'icon':'lol', 'command':self.sp_cnf_return_start, 'side':Tk.RIGHT},
 			])
 		#
@@ -187,6 +190,7 @@ class Gui ( object ):
 		self.gui_pack_tab_marker(frame_tab)
 		self.sp_cnf_tab_ocr = None
 		self.sp_cnf_tab_current = self.sp_cnf_tab_marker
+		self.sp_cnf_tab_icon_current = 'target'
 		frame_tab.grid(row=2)
 		# - place holder
 		Tk.Label(frame_ctr, text=':)').grid(row=3)
@@ -264,10 +268,23 @@ class Gui ( object ):
 		frame = Tk.Frame(frame_tab)
 		frame.pack()
 		self.sp_cnf_tab_marker = frame
+		#
+		self.sp_cnf_marker_selected = None
+		self.combobox_markers = ttk.Combobox(frame, values=self.spCnf.get_list_markers(),
+											 textvariable=self.sp_cnf_marker_selected,
+											 state='readonly')
+		self.combobox_markers.bind('<<ComboboxSelected>>', self.sp_cnf_switch_marker)
+		self.combobox_markers.grid(row=0,columnspan=2)
+		#
 		self.marker_name = Tk.StringVar()
-		self.marker_name.set('marker1')
-		input_text = Tk.Entry(frame, textvariable=self.marker_name)
-		input_text.pack(side=Tk.TOP)
+		self.marker_name.set('marker1')		
+		input_text = Tk.Entry(frame, textvariable=self.marker_name)		
+		input_text.grid(row=1,column=0)
+		#
+		frame_add_btn = Tk.Frame(frame)
+		self.sp_cnf_btn_add_marker = self.gui_pack_btn(frame_add_btn, 'plus', self.sp_cnf_add_marker,
+													   state=Tk.DISABLED)
+		frame_add_btn.grid(row=1,column=1)
 
 	def gui_pack_tab_ocr ( self, frame_tab ):
 		frame = Tk.Frame(frame_tab)
@@ -299,6 +316,9 @@ class Gui ( object ):
 		self.sp_cnf_tab_current.pack_forget()
 		self.sp_cnf_tab_marker.pack()
 		self.sp_cnf_tab_current = self.sp_cnf_tab_marker
+		self.sp_cnf_tabs.btns[self.sp_cnf_tab_icon_current].configure(relief=Tk.RAISED)
+		self.sp_cnf_tabs.btns['target'].configure(relief=Tk.SUNKEN)
+		self.sp_cnf_tab_icon_current = 'target'
 
 	def sp_cnf_switch_tab_ocr ( self, ev ):
 		self.sp_cnf_tab_current.pack_forget()
@@ -307,7 +327,9 @@ class Gui ( object ):
 		else:
 			self.gui_pack_tab_ocr(self.sp_cnf_frame_tab_content)
 		self.sp_cnf_tab_current = self.sp_cnf_tab_ocr
-			
+		self.sp_cnf_tabs.btns[self.sp_cnf_tab_icon_current].configure(relief=Tk.RAISED)
+		self.sp_cnf_tabs.btns['text'].configure(relief=Tk.SUNKEN)
+		self.sp_cnf_tab_icon_current = 'text'
 			
 	# ====== GUI ACTION ====== #
 	# --- button commands --- #
@@ -322,9 +344,19 @@ class Gui ( object ):
 	def sp_cnf_open ( self, ev ):
 		pass
 	def sp_cnf_save ( self, ev ):
-		pass
+		if not self.spCnf.filename:
+			self.sp_cnf_saveas(ev)
+		else:
+			self.spCnf.save()
+
 	def sp_cnf_saveas ( self, ev ):
-		pass
+		f = tkFileDialog.asksaveasfilename(parent=self.root,
+										   title='Save config file as',
+										   initialdir=Gui.path_config_files,
+										   defaultextension='pkl'
+										   )
+		if f:
+			self.spCnf.save(f)
 	
 	def sp_do_screencap ( self, ev ):
 		a = self.sc.capture()
@@ -338,11 +370,11 @@ class Gui ( object ):
 		self.toolbar_start.btns['new'].configure(state=Tk.NORMAL)
 
 	def sp_open_img ( self, ev ):
-		f = askopenfilename(parent=self.root,
-							title='Choose an screenshot',
-							initialdir=Gui.path_screenshots,
-							filetypes=[("Screenshots", "*.tif")]
-							)
+		f = tkFileDialog.askopenfilename(parent=self.root,
+										title='Open a screenshot',
+										initialdir=Gui.path_screenshots,
+										filetypes=[("Screenshots", "*.tif")]
+										)
 		try:
 			self.sp_show_image(f)
 		except:
@@ -427,10 +459,14 @@ class Gui ( object ):
 		cnv.config(scrollregion=(x-5, y-5, w_cnv/2+w2/2+5, h_cnv/2+h2/2+5))
 
 	def sp_prev_zoom_plus ( self, ev ):
+		if not self.sp_cnf_region_is_selected:
+			return
 		self.canvas_sp_cnf_prev_img_zoom = self.canvas_sp_cnf_prev_img_zoom * 2
 		self.sp_preview_draw()
 		self.sp_cnf_preview_toolbar.btns['zoom_minus'].configure(state=Tk.NORMAL)
 	def sp_prev_zoom_minus ( self, ev ):
+		if not self.sp_cnf_region_is_selected:
+			return
 		zoom = self.canvas_sp_cnf_prev_img_zoom
 		if zoom >= 2:
 			self.canvas_sp_cnf_prev_img_zoom = zoom / 2
@@ -439,6 +475,8 @@ class Gui ( object ):
 				self.sp_cnf_preview_toolbar.btns['zoom_minus'].configure(state=Tk.DISABLED)
 
 	def sp_prev_move ( self, ev, orientation, step ):
+		if not self.sp_cnf_region_is_selected:
+			return
 		cnv = self.canvas_sc
 		x0 = min(self.click_x0, self.click_x1)
 		x1 = max(self.click_x0, self.click_x1)
@@ -460,24 +498,35 @@ class Gui ( object ):
 		cnv.coords(self.select_rect, x0, y0, x1, y1)
 		self.sp_preview(x0,y0,x1,y1)
 		#
-		self.sp_cnf_select_region(event)
-
+		self.sp_cnf_select_region(ev)
 
 	def sp_cnf_select_region ( self, ev ):
+		self.sp_cnf_region_is_selected = True
 		x0 = min(self.click_x0, self.click_x1)
 		x1 = max(self.click_x0, self.click_x1)
 		y0 = min(self.click_y0, self.click_y1)
 		y1 = max(self.click_y0, self.click_y1)
-
+		#
 		coords = (x0, y0, x1, y1)
 		self.spCnf.set_selected_rect(coords)
+		self.sp_cnf_btn_add_marker.config(state=Tk.NORMAL)
 	
+	def sp_cnf_add_marker ( self, ev ):
+		name = self.marker_name.get()
+		new_list = tuple(self.combobox_markers['values']) + (name,)
+		self.combobox_markers['values'] = new_list
+		if not (self.sp_cnf_btn_add_marker.cget('state') == Tk.DISABLED):
+			self.spCnf.add_marker(name)
+		
+	def sp_cnf_switch_marker ( self, ev ):
+		print self.combobox_markers.get()
+		
 	def sp_cnf_do_ocr ( self, ev ):
 		img = self.spCnf.get_selected_region()
 		txt = self.sp.do_ocr(img)
 		#
 		print txt
-		
+
 	def do_nothing ( self, ev ):
 		pass
 
