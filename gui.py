@@ -3,7 +3,8 @@
 import os, os.path
 import Tkinter as Tk
 from tkFileDialog import askopenfilename
-import cv2, Image, ImageTk
+from PIL import Image, ImageTk
+import cv2
 
 package_directory = os.path.dirname(os.path.abspath(__file__))
 
