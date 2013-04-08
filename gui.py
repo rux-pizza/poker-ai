@@ -2,7 +2,7 @@
 
 import os, os.path, platform
 import Tkinter as Tk
-from ttk, tkFileDialog
+import ttk, tkFileDialog
 from PIL import Image, ImageTk
 import cv2
 
