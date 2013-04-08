@@ -2,8 +2,9 @@
 
 import os, os.path, platform
 import Tkinter as Tk
-import ttk, tkFileDialog
-import cv2, Image, ImageTk
+from ttk, tkFileDialog
+from PIL import Image, ImageTk
+import cv2
 
 package_directory = os.path.dirname(os.path.abspath(__file__))
 

@@ -1,16 +1,5 @@
 Install :
 
-64 bits
-
-_ Python 2.7 64 bits last release : http://www.python.org/download/releases/
-   (http://www.python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi)
-_ PIL et OpenCV (unofficial 64 bits : http://www.lfd.uci.edu/~gohlke/pythonlibs/ requieres Visual C++ 2008 redistributable (http://www.microsoft.com/en-us/download/confirmation.aspx?id=15336) and Numpy, same page)
-
-_cygwin (http://cygwin.com/install.html) including subversion, wget, unzip
-
-
-
-
 32 bits
 
 _Python 2.7 32 bits last release : http://www.python.org/download/releases/
