@@ -32,19 +32,21 @@ class Scraper ( object ):
 			self.ocr_api.Init(".","eng",tesseract.OEM_DEFAULT)
 			self.ocr_api.SetPageSegMode(tesseract.PSM_AUTO)
 
-	def findPlayerLoc ( self, table, pseudo ):
-		template = cv2.imread('pseudos/'+pseudo+'.png')
-		if template==None:
-			raise Exception('template file for pseudo %s non found\n' % pseudo)
-
+	def locate ( self, table, template ):
 		corrs = cv2.matchTemplate(table, template, self.Corr)
 		_, max_corr, _, loc = cv2.minMaxLoc(corrs)
 
 		if max_corr < self.MinCorr:
 			raise Exception('template not found (max coor %f)\n' % max_corr)
-	
+
 		return loc
 
+	def findPlayerLoc ( self, table, pseudo ):
+		template = cv2.imread('pseudos/'+pseudo+'.png')
+		if template==None:
+			raise Exception('template file for pseudo %s non found\n' % pseudo)
+
+		return locate(table, template)
 
 	def findBestMatch ( self, canvas, templates, color=True ):
 		bestCorr = 0
