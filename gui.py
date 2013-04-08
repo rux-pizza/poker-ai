@@ -311,6 +311,8 @@ class Gui ( object ):
 		# combobox
 		list_markers = self.spCnf.get_list_markers()
 		self.sp_cnf_marker_name = Tk.StringVar()
+		if list_markers:
+			self.sp_cnf_marker_name.set(list_markers[0])
 		self.sp_cnf_next_marker_name = 'marker'+str(len(list_markers)+1)
 		self.combobox_markers = ttk.Combobox(frame, values=list_markers,
 											 textvariable=self.sp_cnf_marker_name)
@@ -332,7 +334,10 @@ class Gui ( object ):
 		self.sp_cnf_btn_locate.pack_forget()
 		frame_locate.pack(side=Tk.LEFT)#
 		frame_commands.grid(row=1,column=0)
-
+		# init if packed after loading a conf file
+		if list_markers:
+			self.root.after(1, self.sp_cnf_switch_marker)
+			
 	def gui_pack_tab_ocr ( self, frame_tab ):
 		frame = Tk.Frame(frame_tab)
 		frame.pack()
