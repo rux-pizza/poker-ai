@@ -1,0 +1,13 @@
+-Dans les fichiers hdb/pdb, il peut y avoir des caractères 0x00, il faut les éliminer.
+-En plus, il y a des lignes qui sont des fois corrompues: des colonnes qui manquent, ou bien deux lignes qui s'entrecoupent: p.ex:
+
+field1 field2 field3 field4
+field1 field2 field1 field2 field3 field4         <-- lignes entrecoupées.
+field1 field2 field3 field4
+
+Le plus simple c'est de ne pas essayer à réparer ça, éliminer les lignes/caractères erronées, et faire le nettoyage une fois les données sur la base de données.
+Il est plus simple alors de vérifier la cohérence des données. Il faut savoir qu la base de données n'est pas forcémment complète:
+	-des mains jouées par des joueurs pourtant inexistantes sur hdb
+	-les actions de certains joueurs qui n'apparaissent pas.
+	
+	

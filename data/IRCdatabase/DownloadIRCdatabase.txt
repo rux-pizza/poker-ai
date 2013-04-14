@@ -1,0 +1,4 @@
+ 
+wget -r -A "holdem*.tgz" -l 1 http://poker.cs.ualberta.ca/IRCdata/
+ 
+for i in *.tgz; do tar -xvzf $i; done

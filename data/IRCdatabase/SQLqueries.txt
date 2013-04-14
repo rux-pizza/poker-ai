@@ -1,0 +1,20 @@
+INSERT INTO hand ("GameType","Date","DealerPosition","HandNumber","NumberPlayers","FlopPlayersNumber","FlopPot","TurnPlayersNumber","TurnPot","RiverPlayersNumber","RiverPot","ShowdownPlayersNumber","ShowdownPot","Board")
+SELECT 'holdem',to_timestamp("timestamp"),"dealer","handnumber","numberplayers",split_part("flop",'/',1)::int,split_part("flop",'/',2)::int,split_part("turn",'/',1)::int,split_part("turn",'/',2)::int,split_part("river",'/',1)::int,split_part("river",'/',2)::int,split_part("showdown",'/',1)::int,split_part("showdown",'/',2)::int,string_to_array("board",' ')
+
+ FROM hdb
+ 
+ 
+ 
+ INSERT INTO player(
+            "Name", "Date", "NumberPlayers", "TablePosition", "PreFlop", 
+            "Flop", "Turn", "River", "Bankroll", "Action", "Winnings", "Cards")
+SELECT "nickname",to_timestamp("timestamp"),"numberplayers","tableposition",regexp_split_to_array("preflop",''),regexp_split_to_array("flop",''),regexp_split_to_array("turn",''),regexp_split_to_array("river",''),"bankroll","action","winnings",string_to_array("cards",' ')
+
+ FROM pdb
+
+ SELECT * FROM hand LEFT JOIN player ON player."Date" = hand."Date" WHERE (array_cat(hand."Board",player."Cards")) @> '{As,Ks,Qs,Js,Ts}'::character(2)[];
+ 
+ COPY hdb FROM 'F:\Projects\poker-ai\data\holdem\poker.cs.ualberta.ca\IRCdata\holdem\hdb.sum'  WITH (FORMAT csv, DELIMITER E'\t')
+ 
+ 
+ SELECT COUNT(*) FROM hand as h WHERE h."NumberPlayers" !=(SELECT COUNT(*) FROM hand LEFT JOIN player ON player."Date" = hand."Date" WHERE hand."ID"=h."ID")

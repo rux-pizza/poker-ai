@@ -1,0 +1,160 @@
+  Voici l'historique des commandes passées à fin de filtre les données avant de les import en base.
+  
+  
+  
+  
+  242  cat pdb.][
+  243  cat pdb.][ | sed 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/\1\t\2\t\3\t\4\t\5\t\6\t\7\t\8\t\9\t\10\t\11\t\12/'
+  244  cat pdb.][ | sed -r 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/\1\t\2\t\3\t\4\t\5\t\6\t\7\t\8\t\9\t\10\t\11\t\12/'
+  245  cat pdb.][ | sed -r 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/\1\t\2\t\3\t\4\t\5\t\6\t\7\t\8\t\9\t\10\t\11\t\12/'
+  246  perl
+  247  cat pdb.][ | perl -pe 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/'
+  248  man perl
+  249  perl /?
+  250  perl --help
+  251  perl -pie 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' pdb.][
+  252  perl -pie "s/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/" pdb.][
+  253  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' pdb.][
+  254  dir
+  255  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' pdb.{_}
+  256  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' pdb.][
+  257  cd ..
+  258  cd ..
+  259  cd ..
+  260  dir
+  261  cd holdem
+  262  dir
+  263  cd poker.cs.ualberta.ca/
+  264  dir
+  265  cd IRCdata/
+  266  dir
+  267  tar -zxvf holdem.*.tgz
+  268  for i in holdem.*.tgz; do tar -xvzf $i; done
+  269  cd holdem
+  270  find . -name "hdb"
+  271  find . -name "hdb" -exec cat > test.file
+  272  find . -name "hdb" | xargs cat > test.file
+  273  find . -name "pdb.*" | xargs cat > pdb
+  274  cd 200103
+  275  cd pdb
+  276  rm -rf pdb.
+  277  dir
+  278  cd ..
+  279  cd ..
+  280  cd 200006
+  281  cd pdb
+  282  rm -rf pdb.
+  283  cd ..
+  284  cd ..
+  285  cd 200005
+  286  cd pdb
+  287  rm -rf pdb.
+  288  cd ..
+  289  cd ..
+  290  cd ..
+  291  cd holdem
+  292  cd 199606
+  293  cd pdb
+  294  rm -rf pdb.
+  295  cd ..
+  296  cd ..
+  297  cd 199902
+  298  cd pdb
+  299  rm -rf pdb.
+  300  cd ..
+  301  cd ..
+  302  dir
+  303  find . -name "pdb.*" | xargs cat > pdb.sum
+  304  find . -name "pdb.*" | xargs cat > sumpdb
+  305  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' pdb
+  306  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' pdb.sum
+  307  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' sumpdb
+  308  wc -l sumpdb
+  309  wc -l sumpdb.bak
+  310  tail
+  311  tail sumpdb.bak
+  312  head sumpdb.bak
+  313  sed -n 7544522p sumpdb
+  314  sed -n 7544523p sumpdb
+  315  sed '7544522d' sumpdb
+  316  sed -n 7544522p sumpdb
+  317* sed -i '7532136' sumtest
+  318  sed -n 7544522p sumpdb
+  319  wc -l sumpdb
+  320  sed -n 7580943p sumpdb
+  321  cat sumpdb | awk '$2 > 909953515 {print $0;}'
+  322  cat sumpdb | awk '$2 < 909953515 {print $0;}' >
+  323  cat sumpdb | awk '$2 < 909953515 {print $0;}'
+  324  cat sumpdb | awk '$2 < 909918194 {print $0;}' > sumtest
+  325  cat sumpdb | awk '$2 > 909949550 {print $0;}' >> sumtest
+  326  cat hdb | awk '$1 = 909949551 {print $0;}'
+  327  cat hdb.sum | awk '$1 = 909918194 {print $0;}'
+  328  cat hdb.sum | awk '$1 == 909918194 {print $0;}'
+  329  sed -n 7532136p sumtest
+  330  sed -n 7544522p sumpdb
+  331  sed -n 7532135p sumtest
+  332  sed -n 7532137p sumtest
+  333  sed -n 7532138p sumtest
+  334  sed -i '7532136,7532137d' sumtest
+  335  cat sumtest | awk 'NF != 12 {print $0;}'
+  336  cat sumtest | awk 'NF != 13 {print $0;}'
+  337  cat sumtest | awk 'NF != 11 {print $0;}'
+  338  cat sumtest | awk '{print NF;}'
+  339  cat sumtest | awk 'NF == 12 {print $0;}'
+  340  cat sumtest | awk 'NF == 13 {print $0;}'
+  341  cat sumtest | awk 'NF == 13 {print $13;}'
+  342  cat sumtest | awk -F'\t' 'NF == 13 {print $13;}'
+  343  cat sumtest | awk -F'\t' '{print NF;}'
+  344  cat sumtest | awk -F'\t' '{print $12;}'
+  345  cat sumtest | awk -F'\t' ' NF != 12 {print $0;}'
+  346  sed -n '\x00' sumtest
+  347  sed -n '\\x00' sumtest
+  348  sed '\x00' sumtest
+  349  sed -e '\x00' sumtest
+  350  sed -e '\x0' sumtest
+  351  sed '[\x00]' sumtest
+  352  sed '/[\x00]/' sumtest
+  353  sed -n '/[\x00]/' sumtest
+  354  sed -n '[\x00]' sumtest
+  355  sed -n '/[\x00]/p' sumtest
+  356  sed -n 's/[\x00]/' sumtest
+  357  sed -n 's/[\x00]//' sumtest
+  358  sed -n 's/[\x00]//g' sumtest
+  359  sed -i 's/[\x00]//' sumtest
+  360  cat sumtest | awk -F'\t' ' NF != 12 {print $0;}'
+  361  sed -n '/[\x00]/p' sumtest
+  362  sed -i 's/[\x00]//g' sumtest
+  363  sed -n '/[\x00]/p' sumtest
+  364  sed -n 8382423p sumtest
+  365  sed -n 8382423p sumtest >lol
+  366  sed -n 10212938p sumtest >lol
+  367  cat sumtest | awk -F'\t' ' NF != 12 {print $0;}'
+  368  cat sumtest | awk ' NF != 11 || NF !=13 {print $0;}'
+  369  cat sumtest | awk ' NF != 11 && NF !=13 {print $0;}'
+  370* sed -n '/988244584/p' m
+  371  sed -n '/797837721/p' hdb.sum
+  372  sed -n '/988407696/p' hdb.sum
+  373* sed -n '/98/p' hdb.sum
+  374  cat sumtest | awk ' NF == 11 || NF ==13 {print $0;}' >sumtest.last
+  375  sed -n 11369042p sumtest.last
+  376  cat sumtest.last | awk 'if ($3 ~ "[0-9]*") {print $0;}
+  377  cat sumtest.last | awk 'if ($3 ~ "[0-9]*") {print $0;}'
+  378  cat sumtest.last | awk '{if ($3 ~ "[0-9]*") print $0;}'
+  379  cat sumtest.last | awk '{if !($3 ~ "[0-9]*") print $0;}'
+  380  cat sumtest.last | awk '{if ! ($3 ~ "[0-9]*") print $0;}'
+  381  cat sumtest.last | awk '{if ($3 !~ "[0-9]*") print $0;}'
+  382  sed -n 11369042p sumtest.last
+  383  cat sumtest.last | awk '{if ($3 !~ "^[0-9]*$") print $0;}'
+  384  cat sumtest.last | awk '{if ($3 ~ "^[0-9]*$") print $0;}' > sumtest.last2
+  385  cat hdb.sum | awk ' {print NF;}
+  386  cat hdb.sum | awk ' {print NF;}'
+  387  cat hdb.sum | awk -F'\t' ' NF != 9 {print $0;}'
+  388  cat hdb.sum | awk -F'\t' ' NF != 8 {print $0;}'
+  389  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9/' hdb232
+  390  head hdb.sum
+  391  head hdb.sum >test.filesd
+  392  perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9/' hdb.sum
+  393  cat hdb.sum | awk -F'\t' ' NF != 9 {print $0;}'
+  394  cat hdb.sum | awk -F'\t' ' NF != 8 {print $0;}'
+  395  sed -i 's/[\x00]//g' hdb.sum
+  396  history > test.history

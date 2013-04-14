@@ -1,0 +1,10 @@
+Scripts used to transform hdb/pdb files from the IRC poker database (http://poker.cs.ualberta.ca/IRCdata/)
+
+These scripts converted them into tab (\t) delimited CSV.
+
+
+pdb files:
+perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9\t$10\t$11\t$12/' pdb_file
+
+hdb files:
+perl -p -i -e 's/^([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+([^ ]*)[ ]+(.*)$/$1\t$2\t$3\t$4\t$5\t$6\t$7\t$8\t$9/' hdb
