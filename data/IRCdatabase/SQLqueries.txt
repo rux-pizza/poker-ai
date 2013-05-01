@@ -1,20 +1,57 @@
 INSERT INTO hand ("GameType","Date","DealerPosition","HandNumber","NumberPlayers","FlopPlayersNumber","FlopPot","TurnPlayersNumber","TurnPot","RiverPlayersNumber","RiverPot","ShowdownPlayersNumber","ShowdownPot","Board")
-SELECT 'holdem',to_timestamp("timestamp"),"dealer","handnumber","numberplayers",split_part("flop",'/',1)::int,split_part("flop",'/',2)::int,split_part("turn",'/',1)::int,split_part("turn",'/',2)::int,split_part("river",'/',1)::int,split_part("river",'/',2)::int,split_part("showdown",'/',1)::int,split_part("showdown",'/',2)::int,string_to_array("board",' ')
+SELECT 'holdem3',to_timestamp("timestamp"),"dealer","handnumber","numberplayers",
+	split_part("flop",'/',1)::int,split_part("flop",'/',2)::int,
+	split_part("turn",'/',1)::int,split_part("turn",'/',2)::int,
+	split_part("river",'/',1)::int,split_part("river",'/',2)::int,
+	split_part("showdown",'/',1)::int,split_part("showdown",'/',2)::int,
+	string_to_array("board",' ') 
+FROM hdb
+WHERE position('/' in "flop") > 0 AND position('/' in "turn") > 0 AND position('/' in "river") > 0 AND position('/' in "showdown") > 0 
+ 
+INSERT INTO player(
+            "GameType","Name", "Date", "NumberPlayers", "TablePosition", "PreFlop", 
+            "Flop", "Turn", "River", "Bankroll", "Action", "Winnings", "Cards")
+SELECT 'holdem2',"nickname",to_timestamp("timestamp"),"numberplayers","tableposition",
+	regexp_split_to_array("preflop",''),
+	regexp_split_to_array("flop",''),
+	regexp_split_to_array("turn",''),
+	regexp_split_to_array("river",''),
+	"bankroll",
+	"action",
+	"winnings",
+	string_to_array("cards",' ')
+FROM pdb
 
- FROM hdb
+ SELECT * FROM hand LEFT JOIN player ON player."Date" = hand."Date" WHERE (array_cat(hand."Board",player."Cards")) @> '{As,Ks,Qs,Js,Ts}'::character(2)[];
+ 
+COPY hdb FROM 'F:\Projects\poker-ai\data\IRCdatabase\holdem\poker.cs.ualberta.ca\IRCdata\holdem3\sumhdb.cleanup.txt'  WITH (FORMAT csv, DELIMITER E'\t')
+COPY pdb FROM 'F:\Projects\poker-ai\data\IRCdatabase\holdem\poker.cs.ualberta.ca\IRCdata\holdem3\sumpdb.cleanup.txt'  WITH (FORMAT csv, DELIMITER E'\t')
+ 
+ 
+ SELECT COUNT(*) FROM hand as h WHERE h."NumberPlayers" !=(SELECT COUNT(*) FROM hand LEFT JOIN player ON player."Date" = hand."Date" WHERE hand."ID"=h."ID")
+ 
+ SELECT * FROM hand as h1 LEFT JOIN hand as h2 ON h1."Date" = h2."Date" WHERE h1."ID" != h2."ID" limit 100
  
  
  
  INSERT INTO player(
-            "Name", "Date", "NumberPlayers", "TablePosition", "PreFlop", 
-            "Flop", "Turn", "River", "Bankroll", "Action", "Winnings", "Cards")
-SELECT "nickname",to_timestamp("timestamp"),"numberplayers","tableposition",regexp_split_to_array("preflop",''),regexp_split_to_array("flop",''),regexp_split_to_array("turn",''),regexp_split_to_array("river",''),"bankroll","action","winnings",string_to_array("cards",' ')
+            "GameType", "Date", "NumberPlayers", "TablePosition", "PreFlop", 
+            "Flop", "Turn", "River", "Bankroll", "Action", "Winnings", "Cards","Timestamp","PlayerID")
+SELECT "gametype",to_timestamp("timestamp"),"numberplayers","tableposition",
+	regexp_split_to_array("preflop",''),
+	regexp_split_to_array("flop",''),
+	regexp_split_to_array("turn",''),
+	regexp_split_to_array("river",''),
+	"bankroll",
+	"action",
+	"winnings",
+	string_to_array("cards",' '),"timestamp", (SELECT "PlayerID" FROM playernameocurrences WHERE playernameocurrences."Nickname" = pdb."nickname")
+	
+FROM pdb
 
- FROM pdb
 
- SELECT * FROM hand LEFT JOIN player ON player."Date" = hand."Date" WHERE (array_cat(hand."Board",player."Cards")) @> '{As,Ks,Qs,Js,Ts}'::character(2)[];
- 
- COPY hdb FROM 'F:\Projects\poker-ai\data\holdem\poker.cs.ualberta.ca\IRCdata\holdem\hdb.sum'  WITH (FORMAT csv, DELIMITER E'\t')
- 
- 
- SELECT COUNT(*) FROM hand as h WHERE h."NumberPlayers" !=(SELECT COUNT(*) FROM hand LEFT JOIN player ON player."Date" = hand."Date" WHERE hand."ID"=h."ID")
+
+COPY hdb("timestamp", dealer, handnumber, numberplayers, flop, turn, river, showdown, board) FROM 'F:\Projects\poker-ai\data\IRCdatabase\test\holdempot\sumhdb.cleanup.txt'  WITH (FORMAT csv, DELIMITER E'\t');
+COPY pdb(nickname, "timestamp", numberplayers, tableposition, preflop, flop, turn, river, bankroll, action, winnings, cards) FROM 'F:\Projects\poker-ai\data\IRCdatabase\test\holdempot\sumpdb.cleanup.txt'  WITH (FORMAT csv, DELIMITER E'\t');
+UPDATE hdb SET "gametype" = 'holdempot' WHERE "gametype" IS NULL;
+UPDATE pdb SET "gametype" = 'holdempot' WHERE "gametype" IS NULL;

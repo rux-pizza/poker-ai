@@ -1,0 +1,32 @@
+
+         hand      player
+2001      
+2000     508        3584
+1999     628        4272
+1998     690        3822
+1997      0          0
+1996     284        1469
+1995     145        737
+
+
+
+DELETE FROM hand WHERE '2000-10-29 2:00:00' <= "Date" AND "Date" < '2000-10-29 3:00:00'
+DELETE FROM hand WHERE '1999-10-31 2:00:00' <= "Date" AND "Date" < '1999-10-31 3:00:00'
+DELETE FROM hand WHERE '1998-10-25 2:00:00' <= "Date" AND "Date" < '1998-10-25 3:00:00'
+DELETE FROM player WHERE '1997-10-26 2:00:00' <= "Date" AND "Date" < '1997-10-26 3:00:00'
+DELETE FROM hand WHERE '1996-10-27 2:00:00' <= "Date" AND "Date" < '1996-10-27 3:00:00'
+DELETE FROM player WHERE '1995-09-24 2:00:00' <= "Date" AND "Date" < '1995-09-24 3:00:00' 
+
+
+
+
+DELETE FROM pdb WHERE 
+(NOT('2000-10-29 2:00:00' <= (CAST(to_timestamp("timestamp") AS timestamp without time zone)) AND (CAST(to_timestamp("timestamp") AS timestamp without time zone)) < '2000-10-29 3:00:00')
+AND 
+NOT('1999-10-31 2:00:00' <= (CAST(to_timestamp("timestamp") AS timestamp without time zone)) AND (CAST(to_timestamp("timestamp") AS timestamp without time zone)) < '1999-10-31 3:00:00')
+AND
+NOT('1998-10-25 2:00:00' <= (CAST(to_timestamp("timestamp") AS timestamp without time zone)) AND (CAST(to_timestamp("timestamp") AS timestamp without time zone)) < '1998-10-25 3:00:00')
+AND
+NOT ('1996-10-27 2:00:00' <= (CAST(to_timestamp("timestamp") AS timestamp without time zone)) AND (CAST(to_timestamp("timestamp") AS timestamp without time zone)) < '1996-10-27 3:00:00')
+AND 
+NOT ('1995-09-24 2:00:00' <= (CAST(to_timestamp("timestamp") AS timestamp without time zone)) AND (CAST(to_timestamp("timestamp") AS timestamp without time zone)) < '1995-09-24 3:00:00'))
